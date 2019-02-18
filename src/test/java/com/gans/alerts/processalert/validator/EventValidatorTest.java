@@ -1,8 +1,8 @@
-package com.gans.alerts.processalert.service;
+package com.gans.alerts.processalert.validator;
 
-import com.gans.alerts.processalert.Validator.EventValidator;
 import com.gans.alerts.processalert.domain.Event;
 import com.gans.alerts.processalert.repository.EventRepository;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,8 +13,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.mockito.ArgumentMatchers.any;
-
 /**
  * Created by gmohan on 18/02/19.
  */
@@ -22,25 +20,15 @@ import static org.mockito.ArgumentMatchers.any;
 @SpringBootTest(classes = EventValidator.class)
 public class EventValidatorTest {
 
-    @TestConfiguration
-    static class EventValidatorTestConfig {
-
-        @Bean
-        public EventValidator getEventValidator() {
-            return new EventValidator();
-        }
-    }
-
+    Event eventStart = null;
+    Event eventFinish = null;
     @Autowired
-    private EventValidator eventValidator;
+    private IEventValidator eventValidator;
     @MockBean
     private EventRepository repository;
 
-    Event eventStart = null;
-    Event eventFinish = null;
-
     @Before
-    public void init(){
+    public void init() {
 
         eventStart = new Event();
         eventStart.setId("a1");
@@ -60,13 +48,31 @@ public class EventValidatorTest {
     @Test
     public void shouldReturnTrueIfRecurringEvent() {
 
-        eventValidator.
+        eventValidator.keepInMemory(eventStart);
+        Assert.assertTrue(eventValidator.isRecurringEvent(eventFinish));
+    }
 
+    @Test
+    public void shouldReturnFalseIfNotRecurring() {
 
+        Event event = new Event();
+        event.setId("newId");
+        Assert.assertFalse(eventValidator.isRecurringEvent(event));
+    }
 
+    @Test
+    public void shouldSaveEvent() {
+        eventValidator.keepInMemory(eventStart);
+        eventValidator.saveEvent(eventFinish);
+        Assert.assertFalse(eventValidator.isRecurringEvent(eventFinish));
+    }
 
+    @TestConfiguration
+    static class EventValidatorTestConfig {
 
-
-
+        @Bean
+        public IEventValidator getEventValidator() {
+            return new EventValidator();
+        }
     }
 }

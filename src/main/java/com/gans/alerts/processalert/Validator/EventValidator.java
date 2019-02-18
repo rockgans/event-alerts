@@ -1,4 +1,4 @@
-package com.gans.alerts.processalert.Validator;
+package com.gans.alerts.processalert.validator;
 
 import com.gans.alerts.processalert.domain.Event;
 import com.gans.alerts.processalert.repository.EventRepository;
@@ -30,7 +30,7 @@ public class EventValidator implements IEventValidator{
     }
 
     @Override
-    public Event KeepInMemory(Event event) {
+    public Event keepInMemory(Event event) {
         return EVENTS_CACHE.put(event.getId(), event);
     }
 

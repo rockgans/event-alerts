@@ -1,8 +1,8 @@
 package com.gans.alerts.processalert.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gans.alerts.processalert.Validator.EventValidator;
-import com.gans.alerts.processalert.Validator.IEventValidator;
+import com.gans.alerts.processalert.exception.InvalidEventException;
+import com.gans.alerts.processalert.validator.IEventValidator;
 import com.gans.alerts.processalert.domain.Event;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +14,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -38,6 +39,7 @@ public class EventsService implements IEventsService {
             return;
         }
         logger.info("file loaded from path:{}",filePath);
+
         Path path = Paths.get(filePath);
         try (BufferedReader reader = Files.newBufferedReader(path, Charset.forName(CHARSET_NAME))) {
 
@@ -47,18 +49,23 @@ public class EventsService implements IEventsService {
 
                 ObjectMapper mapper = new ObjectMapper();
                 Event event = mapper.readValue(currentLine, Event.class);
+                if(StringUtils.isEmpty(event.getId())){
+                    throw new InvalidEventException();
+                }
                 if (eventValidator.isRecurringEvent(event)) {
                     eventValidator.saveEvent(event);
                 } else {
-                    eventValidator.KeepInMemory(event);
+                    eventValidator.keepInMemory(event);
                 }
-
             }
+        } catch (NoSuchFileException ex) {
+            logger.error("file not available in location {} with message {}", filePath, ex.getMessage());
+            logger.debug(ex.getStackTrace().toString());
         } catch (IOException ex) {
             logger.error("error while reading file {}", ex.getMessage());
-            //logger.debug(ex.getStackTrace().toString());
-
+            logger.debug(ex.getStackTrace().toString());
+        }catch (InvalidEventException ex){
+            logger.error("Invalid event with no event id");
         }
-
     }
 }

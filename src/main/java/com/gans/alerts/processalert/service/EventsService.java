@@ -19,6 +19,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
+ * Reads the file from the path and process the content. Identifies long duration process to set up alerts in the Database.
  * Created by gmohan on 18/02/19.
  */
 @Service

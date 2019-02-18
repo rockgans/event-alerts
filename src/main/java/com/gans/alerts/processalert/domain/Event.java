@@ -6,6 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
+ * Event POJO
  * Created by gmohan on 17/02/19.
  */
 @Entity

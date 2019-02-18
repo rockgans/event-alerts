@@ -5,6 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 /**
+ * Repository interface to perform basic CRUD operartions.
  * Created by gmohan on 17/02/19.
  */
 @Repository

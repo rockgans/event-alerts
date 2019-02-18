@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.gans.alerts</groupId>
-	<artifactId>process-alertEnabled</artifactId>
+	<artifactId>process-alert</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>process-alertEnabled</name>
+	<name>process-alert</name>
 	<description>Project to alertEnabled expensive processes</description>
 
 	<properties>

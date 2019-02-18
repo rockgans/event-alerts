@@ -7,6 +7,10 @@ import java.io.IOException;
  */
 public interface IEventsService {
 
+    /**
+     * Reads the file from the path and process the content. Identifies long duration process to set up alerts in the Database.
+     * @param path
+     */
     void loadEventsFromFile(String path);
 }
 

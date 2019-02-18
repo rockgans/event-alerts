@@ -7,6 +7,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 /**
+ * Executor with a pool of 10 threads to be used by the async processes
  * Created by gmohan on 18/02/19.
  */
 @Configuration
